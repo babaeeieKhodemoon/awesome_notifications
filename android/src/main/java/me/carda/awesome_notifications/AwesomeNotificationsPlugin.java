@@ -70,6 +70,12 @@ import me.carda.awesome_notifications.utils.MapUtils;
 import me.carda.awesome_notifications.utils.MediaUtils;
 import me.carda.awesome_notifications.utils.StringUtils;
 
+
+import android.media.RingtoneManager;
+import android.os.PowerManager;
+import android.app.Application;
+import android.content.Context;
+
 /** AwesomeNotificationsPlugin **/
 public class AwesomeNotificationsPlugin extends BroadcastReceiver implements FlutterPlugin, MethodCallHandler, PluginRegistry.NewIntentListener, ActivityAware {
 
@@ -658,7 +664,11 @@ public class AwesomeNotificationsPlugin extends BroadcastReceiver implements Flu
             }
 
             if(pushNotification.schedule == null){
-
+                PowerManager TempPowerManager = (PowerManager) applicationContext.getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock TempWakeLock = TempPowerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                        PowerManager.ON_AFTER_RELEASE, "mymhdrtag,");
+                TempWakeLock.acquire(60*1000L);
+                result.success(null);
                 NotificationSender.send(
                         applicationContext,
                         NotificationSource.Local,
